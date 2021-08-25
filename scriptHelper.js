@@ -28,7 +28,7 @@ function validateInput(testInput) {
 };
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-
+document.addEventListener("submit", function(){
     document = document.querySelector("launchForm");
     pilot = document.querySelector("input[name=pilotName]");
     copilot = document.querySelector("input[name=copilotName]");
@@ -78,6 +78,8 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
         launchStatus.style.color = "green"
     }
 
+    submit.preventDefault()
+    })
 }
 
 async function myFetch() {
