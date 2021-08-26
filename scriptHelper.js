@@ -14,6 +14,19 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
                 </ol>
                 <img src="">
    */
+let div = document.getElementById("missionTarget")
+div.innerHTML = `
+<h2>Mission Destination</h2>
+<ol>
+   <li>Name: ${json[missionDestination].name}</li>
+   <li>Diameter: ${json[missionDestination].diameter}</li>
+   <li>Star: ${json[missionDestination].star}</li>
+   <li>Distance from Earth: ${json[missionDestination].distance}</li>
+   <li>Number of Moons: ${json[missionDestination].moons}</li>
+</ol>
+<img src="${json[missionDestination].image}">
+`
+            
 }
 
 function validateInput(testInput) {
@@ -28,8 +41,8 @@ function validateInput(testInput) {
 };
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-document.addEventListener("submit", function(){
-    document = document.querySelector("launchForm");
+
+    form = document.querySelector("launchForm");
     pilot = document.querySelector("input[name=pilotName]");
     copilot = document.querySelector("input[name=copilotName]");
     fuelLevel = document.querySelector("input[name=fuelLevel]");
@@ -48,7 +61,7 @@ document.addEventListener("submit", function(){
         alert("You must enter a valid input");
     }
 
-    list.style.visibility = visible;
+    
     let launchStatus = document.getElementById("launchStatus");
 
     let pilotStatus = document.getElementById("pilotStatus");
@@ -62,12 +75,14 @@ document.addEventListener("submit", function(){
     let cargoStatus = document.getElementById("cargoStatus");
 
     if (fuelLevel < 10000){
+        list.style.visibility = visible;
         fuelStatus.innerText = "Fuel level too low for launch."
         launchStatus.innerText = "Shuttle not ready for launch."
         launchStatus.style.color = 'red'
     }
     
     if (cargoLevel > 10000){
+        list.style.visibility = visible;
         cargoStatus.innerText = "Cargo level too high to launch."
         launchStatus.innerText = "Shuttle not ready for launch."
         launchStatus.style.color = 'red'
@@ -78,22 +93,21 @@ document.addEventListener("submit", function(){
         launchStatus.style.color = "green"
     }
 
-    submit.preventDefault()
-    })
+    
 }
 
 async function myFetch() {
     let planetsReturned;
 
-    planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json').then( function(response) {
-    response.json()
-        });
-
-    return (planetsReturned);
+    planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json').then(function(response){
+    response.json()})
+    
+    return planetsReturned;
 }
 
 function pickPlanet(planets) {
-
+    console.log(planets)
+    return Math.floor(Math.random()*planets.length);  
 }
 
 module.exports.addDestinationInfo = addDestinationInfo;
