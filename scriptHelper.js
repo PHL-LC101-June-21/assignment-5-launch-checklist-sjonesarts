@@ -15,41 +15,36 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
                 <img src="">
    */
 let div = document.getElementById("missionTarget")
+
+
 div.innerHTML = `
 <h2>Mission Destination</h2>
 <ol>
-   <li>Name: ${json[missionDestination].name}</li>
-   <li>Diameter: ${json[missionDestination].diameter}</li>
-   <li>Star: ${json[missionDestination].star}</li>
-   <li>Distance from Earth: ${json[missionDestination].distance}</li>
-   <li>Number of Moons: ${json[missionDestination].moons}</li>
+   <li>Name: ${name}</li>
+   <li>Diameter: ${diameter}</li>
+   <li>Star: ${star}</li>
+   <li>Distance from Earth: ${distance}</li>
+   <li>Number of Moons: ${moons}</li>
 </ol>
-<img src="${json[missionDestination].image}">
+<img src="${imageUrl}">
 `
             
 }
 
 function validateInput(testInput) {
 
- if (testInput === "") {
+ if (String(testInput) === "") {
      return "Empty"
- } else if (typeof testInput === number){
-     return "Is a Number"
- } else if (isNaN(testInput)){
+ } else if (isNaN(Number(testInput))){
      return "Not a Number"
+ } else {
+     return "Is a Number"
  }
 };
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 
-    form = document.querySelector("launchForm");
-    pilot = document.querySelector("input[name=pilotName]");
-    copilot = document.querySelector("input[name=copilotName]");
-    fuelLevel = document.querySelector("input[name=fuelLevel]");
-    cargoLevel = document.querySelector("input[name=cargoLevel]");
-    list = document.getElementById('faultyItems')
-
-    if (validateInput(pilot) === "Empty" || validateInput(copilot) === "Empty" || validateInput(fuelLevel === "Empty" ) || validateInput(cargoLevel) === "Empty"){
+    if (validateInput(pilot) === "Empty" || validateInput(copilot) === "Empty" || validateInput(fuelLevel) === "Empty" || validateInput(cargoLevel) === "Empty"){
         alert("All fields are required!");
     }
 
@@ -58,7 +53,7 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
     }
 
     if (validateInput(fuelLevel) === "Not a Number" || validateInput(cargoLevel) === "Not a Number"){
-        alert("You must enter a valid input");
+        alert("You must enter a valid input ln63");
     }
 
     
@@ -73,16 +68,19 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
     let fuelStatus = document.getElementById("fuelStatus")
 
     let cargoStatus = document.getElementById("cargoStatus");
-
+    
+    list = document.getElementById('faultyItems')
+    list.style.visibility = "visible"
+    
     if (fuelLevel < 10000){
-        list.style.visibility = visible;
+        
         fuelStatus.innerText = "Fuel level too low for launch."
         launchStatus.innerText = "Shuttle not ready for launch."
         launchStatus.style.color = 'red'
     }
     
     if (cargoLevel > 10000){
-        list.style.visibility = visible;
+        
         cargoStatus.innerText = "Cargo level too high to launch."
         launchStatus.innerText = "Shuttle not ready for launch."
         launchStatus.style.color = 'red'
@@ -99,15 +97,16 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 async function myFetch() {
     let planetsReturned;
 
-    planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json').then(function(response){
-    response.json()})
+    planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json');
+
+    planetsReturned = await planetsReturned.json();
     
     return planetsReturned;
 }
 
 function pickPlanet(planets) {
-    console.log(planets)
-    return Math.floor(Math.random()*planets.length);  
+let randoPlanet = Math.floor(Math.random()*planets.length);  
+return planets[randoPlanet]
 }
 
 module.exports.addDestinationInfo = addDestinationInfo;
